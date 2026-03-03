@@ -466,6 +466,22 @@ Title: `[Task] Back-end Testing`
 
 2. Keep at least two tests and discard at least one.
 
+3. For each generated test, add a one-line comment that documents your decision and reason:
+   - For a kept or fixed test: `# KEPT: <reason>` or `# FIXED: <reason>`
+   - For a discarded test: paste it commented out with `# DISCARDED: <reason>` above it
+
+   Example:
+
+   ```python
+   # KEPT: covers the empty-list edge case, not tested elsewhere
+   def test_filter_returns_empty_list_when_no_interactions() -> None:
+       ...
+
+   # DISCARDED: duplicates test_filter_includes_interaction_at_boundary
+   # def test_filter_boundary_duplicate() -> None:
+   #     ...
+   ```
+
 #### 1.5.3. Run the full test suite
 
 1. To run the full test suite,
@@ -501,6 +517,7 @@ Title: `[Task] Back-end Testing`
 - [ ] All unit tests pass.
 - [ ] All end-to-end tests pass.
 - [ ] AI-generated tests include at least two kept tests and at least one discarded test.
+- [ ] Each kept, fixed, or discarded test has a one-line comment explaining the decision.
 - [ ] The Part A fix and Part B fix are separate commits.
 - [ ] PR is approved.
 - [ ] PR is merged.
