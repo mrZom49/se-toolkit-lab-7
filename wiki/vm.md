@@ -6,7 +6,7 @@
 - [Your VM](#your-vm)
 - [`<your-vm-name>`](#your-vm-name)
 - [`<your-vm-ip-address>`](#your-vm-ip-address)
-- [Prepare the connection](#prepare-the-connection)
+- [Connect to the correct network](#connect-to-the-correct-network)
 - [Go to the VMs site](#go-to-the-vms-site)
 - [Create a VM](#create-a-vm)
   - [Create a subscription](#create-a-subscription)
@@ -45,19 +45,11 @@ Example: `192.0.2.1`.
 
 See [Get the IP address of the VM](#get-the-ip-address-of-the-vm).
 
-## Prepare the connection
+## Connect to the correct network
 
 1. Disable `VPN`.
-2. Connect your computer to the `Wi-Fi` network `UniversityStudent`.
-3. To check the connection to your VM,
 
-   [run in the `VS Code Terminal`](./vs-code.md#run-a-command-in-the-vs-code-terminal):
-
-   ```terminal
-   ping <your-vm-ip-address>
-   ```
-
-   See [`<your-vm-ip-address>`](#your-vm-ip-address).
+2. Connect your local machine (laptop) to the `Wi-Fi` network `UniversityStudent`.
 
 ## Go to the VMs site
 
