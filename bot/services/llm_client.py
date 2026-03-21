@@ -20,11 +20,14 @@ class LLMClient:
         """Initialize the LLM client.
 
         Args:
-            base_url: Base URL of the LLM API.
+            base_url: Base URL of the LLM API (may include /v1 suffix).
             api_key: API key for authentication.
             model: Model name to use for completions.
         """
+        # Normalize base_url: strip /v1 suffix if present (we add it in requests)
         self.base_url = base_url.rstrip("/")
+        if self.base_url.endswith("/v1"):
+            self.base_url = self.base_url[:-3]
         self.api_key = api_key
         self.model = model
         self._client = httpx.AsyncClient(
