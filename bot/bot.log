@@ -1,0 +1,25 @@
+nohup: ignoring input
+warning: `VIRTUAL_ENV=C:/Users/DELL/Documents/projects/SET/se-toolkit-lab-2/.venv` does not match the project environment path `C:\Users\DELL\Documents\projects\SET\se-toolkit-lab-7\.venv` and will be ignored; use `--active` to target the active environment instead
+Traceback (most recent call last):
+  File "C:\Users\DELL\Documents\projects\SET\se-toolkit-lab-7\bot\bot.py", line 262, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\DELL\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\runners.py", line 204, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\DELL\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\runners.py", line 127, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\DELL\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\base_events.py", line 719, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\DELL\Documents\projects\SET\se-toolkit-lab-7\bot\bot.py", line 258, in main
+    await run_telegram_mode()
+  File "C:\Users\DELL\Documents\projects\SET\se-toolkit-lab-7\bot\bot.py", line 169, in run_telegram_mode
+    bot = Bot(token=settings.bot_token)
+  File "c:\Users\DELL\Documents\projects\SET\se-toolkit-lab-7\.venv\Lib\site-packages\aiogram\client\bot.py", line 278, in __init__
+    validate_token(token)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\DELL\Documents\projects\SET\se-toolkit-lab-7\.venv\Lib\site-packages\aiogram\utils\token.py", line 27, in validate_token
+    raise TokenValidationError(msg)
+aiogram.utils.token.TokenValidationError: Token is invalid!
