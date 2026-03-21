@@ -17,17 +17,17 @@ async def handle_labs(api_client: LMSAPIClient) -> str:
     try:
         items = await api_client.get_items()
         
-        # Filter for labs (type == "lab" or items that have children)
-        labs = [item for item in items if item.get("type") == "lab" or item.get("parent_id") is None]
+        # Filter for labs (type == "lab")
+        labs = [item for item in items if item.get("type") == "lab"]
         
         if not labs:
             return "📚 No labs available at the moment."
         
         lab_lines = []
         for lab in labs:
-            name = lab.get("name", "Unknown")
+            title = lab.get("title", lab.get("name", "Unknown"))
             description = lab.get("description", "")
-            lab_lines.append(f"• {name} — {description}" if description else f"• {name}")
+            lab_lines.append(f"• {title} — {description}" if description else f"• {title}")
         
         return "📚 Available Labs:\n" + "\n".join(lab_lines)
         
