@@ -1,11 +1,21 @@
 """Handler for /health command."""
 
+import asyncio
 
-def handle_health() -> str:
+from services.lms_api import LMSAPIClient, LMSAPIError
+
+
+async def handle_health(api_client: LMSAPIClient) -> str:
     """Handle the /health command.
     
+    Args:
+        api_client: LMS API client instance.
+        
     Returns:
         Backend service status message.
     """
-    # Placeholder - will be implemented in Phase 2
-    return "✅ Backend services are operational"
+    try:
+        result = await api_client.health_check()
+        return f"✅ Backend is healthy. {result['item_count']} items available."
+    except LMSAPIError as e:
+        return f"❌ Backend error: {e.message}"

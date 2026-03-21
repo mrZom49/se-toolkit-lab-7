@@ -23,7 +23,8 @@ from handlers.help import handle_help
 from handlers.health import handle_health
 from handlers.scores import handle_scores
 from handlers.labs import handle_labs
-from services import LMSAPIClient, LLMClient
+from services.lms_api import LMSAPIClient, LMSAPIError
+from services.llm_client import LLMClient
 
 
 def parse_args() -> argparse.Namespace:
@@ -38,11 +39,16 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def route_command(command: str, args: str | None = None) -> str:
+async def route_command(
+    command: str,
+    api_client: LMSAPIClient,
+    args: str | None = None,
+) -> str:
     """Route a command to the appropriate handler.
     
     Args:
         command: The command name (without leading /).
+        api_client: LMS API client instance.
         args: Optional command arguments.
         
     Returns:
@@ -53,11 +59,11 @@ def route_command(command: str, args: str | None = None) -> str:
     elif command == "help":
         return handle_help()
     elif command == "health":
-        return handle_health()
+        return await handle_health(api_client)
     elif command == "scores":
-        return handle_scores(args)
+        return await handle_scores(api_client, args)
     elif command == "labs":
-        return handle_labs()
+        return await handle_labs(api_client)
     else:
         return f"❓ Unknown command: /{command}\nUse /help to see available commands."
 
@@ -107,12 +113,21 @@ async def run_test_mode(user_input: str) -> None:
     # Load settings (for API configuration)
     settings = load_settings()
     
-    # Parse input and route to handler
-    command, args = parse_test_input(user_input)
-    response = route_command(command, args)
+    # Initialize API client
+    api_client = LMSAPIClient(
+        settings.lms_api_base_url or "http://localhost:42002",
+        settings.lms_api_key or "test-key",
+    )
     
-    # Print response to stdout
-    print(response)
+    try:
+        # Parse input and route to handler
+        command, args = parse_test_input(user_input)
+        response = await route_command(command, api_client, args)
+        
+        # Print response to stdout
+        print(response)
+    finally:
+        await api_client.close()
 
 
 async def run_telegram_mode() -> None:
@@ -121,7 +136,7 @@ async def run_telegram_mode() -> None:
     settings.validate_for_telegram()
     
     # Initialize services
-    lms_client = LMSAPIClient(settings.lms_api_base_url, settings.lms_api_key)
+    api_client = LMSAPIClient(settings.lms_api_base_url, settings.lms_api_key)
     llm_client = LLMClient(settings.llm_api_base_url, settings.llm_api_key)
     
     # Initialize aiogram
@@ -139,23 +154,26 @@ async def run_telegram_mode() -> None:
     
     @dp.message(Command("health"))
     async def cmd_health(message: types.Message) -> None:
-        await message.answer(handle_health())
+        response = await handle_health(api_client)
+        await message.answer(response)
     
     @dp.message(Command("scores"))
     async def cmd_scores(message: types.Message, command: CommandObject) -> None:
         lab_id = command.args if command.args else None
-        await message.answer(handle_scores(lab_id))
+        response = await handle_scores(api_client, lab_id)
+        await message.answer(response)
     
     @dp.message(Command("labs"))
     async def cmd_labs(message: types.Message) -> None:
-        await message.answer(handle_labs())
+        response = await handle_labs(api_client)
+        await message.answer(response)
     
     # Start polling
     await dp.start_polling(bot)
     
     # Cleanup
     await bot.session.close()
-    await lms_client.close()
+    await api_client.close()
     await llm_client.close()
 
 

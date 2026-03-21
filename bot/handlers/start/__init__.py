@@ -1,9 +1,14 @@
 """Handler for /start command."""
 
+from config import BotSettings
 
-def handle_start() -> str:
+
+def handle_start(settings: BotSettings | None = None) -> str:
     """Handle the /start command.
     
+    Args:
+        settings: Optional bot settings to get bot name.
+        
     Returns:
         Welcome message for new users.
     """
