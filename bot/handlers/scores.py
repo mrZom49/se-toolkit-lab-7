@@ -1,24 +1,18 @@
 """Handler for /scores command."""
 
+from services.lms_api import LMSAPIClient
 
-def handle_scores(lab_id: str | None = None) -> str:
+
+async def handle_scores(api_client: LMSAPIClient, lab_id: str | None = None) -> str:
     """Handle the /scores command.
-    
+
     Args:
+        api_client: LMS API client instance.
         lab_id: Optional lab identifier to filter scores.
-        
+
     Returns:
         Scores information message.
     """
-<<<<<<< Updated upstream
-    if lab_id:
-        return f"📊 Scores for {lab_id}:\n\nPlaceholder - scores will be fetched from LMS API"
-    return (
-        "📊 Your Scores:\n\n"
-        "Placeholder - scores will be fetched from LMS API\n"
-        "Usage: /scores <lab_id> to view scores for a specific lab"
-    )
-=======
     if not lab_id:
         return (
             "📊 Your Scores:\n\n"
@@ -31,10 +25,11 @@ def handle_scores(lab_id: str | None = None) -> str:
     if lab_id.isdigit():
         lab_id = f"lab-{lab_id.zfill(2)}"
     elif not lab_id.startswith("lab-"):
-        # Try to extract lab number from simple formats like "lab4" or "lab 4"
-        lab_id = lab_id.replace(" ", "").replace("lab", "")
-        if lab_id.isdigit():
-            lab_id = f"lab-{lab_id.zfill(2)}"
+        # Try to extract lab number
+        import re
+        match = re.search(r"(\d+)", lab_id)
+        if match:
+            lab_id = f"lab-{match.group(1).zfill(2)}"
 
     try:
         scores = await api_client.get_scores(lab_id)
@@ -58,4 +53,3 @@ def handle_scores(lab_id: str | None = None) -> str:
         lines.append(f"  0-49: {bucket_0} | 50-69: {bucket_1} | 70-89: {bucket_2} | 90-100: {bucket_3} (Total: {total})")
 
     return "\n".join(lines)
->>>>>>> Stashed changes

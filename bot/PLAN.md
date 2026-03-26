@@ -21,11 +21,16 @@ bot/
 ├── bot.py              # Entry point: Telegram startup + --test mode
 ├── handlers/           # Command handlers (transport-agnostic)
 │   ├── __init__.py
-│   ├── start.py        # /start command
-│   ├── help.py         # /help command
-│   ├── health.py       # /health command
-│   ├── scores.py       # /scores command
-│   └── labs.py         # /labs command
+│   ├── start/
+│   │   └── __init__.py    # /start command handler
+│   ├── help/
+│   │   └── __init__.py    # /help command handler
+│   ├── health/
+│   │   └── __init__.py    # /health command handler
+│   ├── scores/
+│   │   └── __init__.py    # /scores command handler
+│   └── labs/
+│       └── __init__.py    # /labs command handler
 ├── services/           # External API clients
 │   ├── __init__.py
 │   ├── lms_api.py      # LMS API client
@@ -42,7 +47,7 @@ bot/
 Create the basic project structure with:
 - `pyproject.toml` with dependencies (aiogram, httpx, pydantic-settings)
 - `config.py` for loading environment variables
-- Empty handler modules with placeholder responses
+- Handler modules with placeholder responses in subdirectories
 - `bot.py` entry point with `--test` mode support
 - `.env.bot.example` template
 
@@ -78,6 +83,7 @@ uv run bot.py --test "/start"        # Prints welcome message
 uv run bot.py --test "/help"         # Prints command list
 uv run bot.py --test "/health"       # Prints backend status
 uv run bot.py --test "/scores lab-04"
+uv run bot.py --test "what labs are available"
 ```
 
 This reads config from `.env.bot.secret` but does NOT connect to Telegram.
