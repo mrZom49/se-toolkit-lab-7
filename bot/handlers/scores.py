@@ -25,11 +25,10 @@ async def handle_scores(api_client: LMSAPIClient, lab_id: str | None = None) -> 
     if lab_id.isdigit():
         lab_id = f"lab-{lab_id.zfill(2)}"
     elif not lab_id.startswith("lab-"):
-        # Try to extract lab number
-        import re
-        match = re.search(r"(\d+)", lab_id)
-        if match:
-            lab_id = f"lab-{match.group(1).zfill(2)}"
+    # Try to extract lab number from simple formats like "lab4" or "lab 4"                               │
+    	lab_id = lab_id.replace(" ", "").replace("lab", "")                                                  │
+  	if lab_id.isdigit():                                                                                 │
+ 		lab_id = f"lab-{lab_id.zfill(2)}
 
     try:
         scores = await api_client.get_scores(lab_id)
