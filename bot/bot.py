@@ -2,8 +2,8 @@
 """LMS Bot entry point.
 
 Supports two modes:
-1. Test mode: `uv run bot.py --test "/command"` - prints response to stdout
-2. Telegram mode: `uv run bot.py` - runs the Telegram bot
+1) Test mode: `uv run bot.py --test "/command"` - prints response to stdout
+2) Telegram mode: `uv run bot.py` - runs the Telegram bot
 """
 
 import argparse
